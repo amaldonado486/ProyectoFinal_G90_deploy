@@ -1,6 +1,12 @@
+import React from "react";
+
 const Footer = () => (
-  <footer className="text-center py-6 bg-gray-900 text-gray-400 mt-10">
-    © 2024 - Sazón Planner Premium - Todos los derechos reservados.
+  <footer className="bg-dark text-light text-center py-4 mt-5">
+    <div className="container">
+      <p className="mb-0">
+        © 2025 - <strong>DeliChef Premium</strong> - Todos los derechos reservados.
+      </p>
+    </div>
   </footer>
 );
 

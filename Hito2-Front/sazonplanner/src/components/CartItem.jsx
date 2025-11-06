@@ -1,3 +1,4 @@
+import React from "react";
 import { Minus, Plus, X } from "lucide-react";
 import { formatPrice } from "../utils/formatPrice";
 
@@ -9,10 +10,11 @@ const CartItem = ({ item, kit, updateQuantity, removeFromCart }) => {
         alt={kit.name}
         className="rounded me-3"
         style={{ width: "64px", height: "64px", objectFit: "cover" }}
-        onError={(e) =>
-          (e.target.src =
-            "https://placehold.co/400x300/e5e7eb/6b7280?text=Kit")
-        }
+       // onError={(e) =>
+       //   (e.target.src =
+       //     "https://placehold.co/400x300/e5e7eb/6b7280?text=Kit")
+       // }
+        onError={(e) => (e.target.src = "https://placehold.co/400x300?text=No+Image")}
       />
 
       <div className="flex-grow-1">
@@ -29,7 +31,7 @@ const CartItem = ({ item, kit, updateQuantity, removeFromCart }) => {
           <Minus size={16} />
         </button>
 
-        <span classname="mx-2 fw-medium">{item.quantity}</span>
+        <span className="mx-2 fw-medium">{item.quantity}</span>
 
         <button
           className="btn btn-light btn-sm"

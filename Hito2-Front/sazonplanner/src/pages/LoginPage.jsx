@@ -50,11 +50,8 @@ const LoginPage = ({ navigate }) => {
         </form>
 
         <p className="text-center mt-3">
-          ¿No tienes cuenta?
-          <button
-            className="btn btn-link p-1"
-            onClick={() => navigate("/register")}
-          >
+          ¿No tienes cuenta?          
+            <button onClick={() => navigate("/register")} className = "btn btn-link">
             Regístrate
           </button>
         </p>

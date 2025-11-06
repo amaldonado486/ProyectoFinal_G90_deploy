@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthProvider";
 import { CartContext } from "../context/CartProvider";
 import { formatPrice } from "../utils/formatPrice";
 
+
 // Icons
 import {
   Package,
@@ -25,11 +26,11 @@ const Navbar = ({ navigate }) => {
 
         {/* Logo */}
         <button
-          onClick={() => navigate("home")}
-          className="navbar-brand d-flex align-items-center gap-2 border-0 bg-transparent"
-        >
-          <Package size={22} />
-          <span className="fw-bold">Sazón Planner</span>
+          onClick={() => navigate("/")}
+          className="navbar-brand d-flex align-items-center gap-2 border-0 bg-transparent">
+
+          <img src="/logo2.png" alt="DeliChef" style={{ height: "60px", objectFit: "contain" }}/>
+          
         </button>
 
         {/* Toggle mobile */}
@@ -49,7 +50,8 @@ const Navbar = ({ navigate }) => {
             <li className="nav-item">
               <button
                 className="btn btn-outline-light d-flex align-items-center gap-1"
-                onClick={() => navigate("tienda")}
+                onClick={() => navigate("/shop")}
+                //onClick={() => navigate("tienda")}
               >
                 <HomeIcon size={16} /> Tienda
               </button>
@@ -61,7 +63,7 @@ const Navbar = ({ navigate }) => {
                 <li>
                   <button
                     className="btn btn-success d-flex align-items-center gap-1"
-                    onClick={() => navigate("profile")}
+                    onClick={() => navigate("/profile")}
                   >
                     <User size={16} /> Mi Perfil
                   </button>
@@ -81,7 +83,7 @@ const Navbar = ({ navigate }) => {
               <li>
                 <button
                   className="btn btn-warning d-flex align-items-center gap-1"
-                  onClick={() => navigate("login")}
+                  onClick={() => navigate("/login")}
                 >
                   <LogIn size={16} /> Iniciar Sesión
                 </button>
@@ -92,7 +94,8 @@ const Navbar = ({ navigate }) => {
             <li>
               <button
                 className="btn btn-primary position-relative d-flex align-items-center gap-1"
-                onClick={() => navigate("carrito")}
+                onClick={() => navigate("/cart")}
+                //onClick={() => navigate("carrito")}
               >
                 <ShoppingCart size={16} />
                 Carrito: {formattedTotal}

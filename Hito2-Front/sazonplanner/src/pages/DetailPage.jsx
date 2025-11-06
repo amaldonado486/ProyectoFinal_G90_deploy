@@ -7,6 +7,7 @@ export default function DetailPage({ navigate, selectedId }) {
   const { addToCart } = useContext(CartContext);
 
   const kit = KITS.find((k) => String(k.id) === String(selectedId));
+  console.log ("KIT DETAIL ->", kit);
 
   if (!kit) {
     return (
@@ -23,6 +24,8 @@ export default function DetailPage({ navigate, selectedId }) {
     addToCart(kit.id);
     navigate("/cart");
   };
+
+
 
   return (
     <main className="container py-5">

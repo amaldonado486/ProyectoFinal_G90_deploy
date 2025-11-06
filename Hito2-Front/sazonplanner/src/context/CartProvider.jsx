@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { KITS } from "../utils/kits";
+import { KITS } from "../data/kits";
 
 export const CartContext = createContext();
 
@@ -8,7 +8,7 @@ export const CartProvider = ({ children }) => {
 
   const cartTotal = Object.entries(cartItems).reduce(
     (total, [kitId, qty]) => {
-      const kit = KITS.find((k) => k.id === kitId);
+      const kit = KITS.find((k) => String(k.id) === String(kitId));
       return total + (kit ? kit.price * qty : 0);
     },
     0
@@ -19,11 +19,11 @@ export const CartProvider = ({ children }) => {
     0
   );
 
-  //const addToCart = (kitId, quantity = 1) =>
-    const addToCart = (id) =>
+  // ✅ FIX
+  const addToCart = (id) =>
     setCartItems((prev) => ({
       ...prev,
-      [kitId]: (prev[kitId] || 0) + 1,
+      [id]: (prev[id] || 0) + 1,
     }));
 
   const updateQuantity = (kitId, newQuantity) => {
