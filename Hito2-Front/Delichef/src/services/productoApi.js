@@ -1,9 +1,13 @@
-import { KITS } from "../data/kits";
+import axios from "axios";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 export async function getProducts() {
-  return Promise.resolve(KITS);
+  const res = await fetch(`${API_URL}/api/kits`);
+  return res.json();
 }
 
 export async function getProductById(id) {
-  return Promise.resolve(KITS.find((k) => k.id === id));
+  const res = await fetch(`${API_URL}/api/kits/${id}`);
+  return res.json();
 }

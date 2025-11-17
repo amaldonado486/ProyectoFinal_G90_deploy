@@ -22,7 +22,7 @@ const CartItem = ({ item, kit, updateQuantity, removeFromCart }) => {
         <small className="text-muted">{formatPrice(kit.price)} c/u</small>
       </div>
 
-      {/* Quantity */}
+      {/* cantidad */}
       <div className="d-flex align-items-center me-3">
         <button
           className="btn btn-light btn-sm"

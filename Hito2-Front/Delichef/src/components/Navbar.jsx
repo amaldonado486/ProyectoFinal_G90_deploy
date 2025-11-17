@@ -4,7 +4,7 @@ import { CartContext } from "../context/CartProvider";
 import { formatPrice } from "../utils/formatPrice";
 
 
-// Icons
+// Iconos
 import {
   Package,
   Home as HomeIcon,
@@ -33,7 +33,7 @@ const Navbar = ({ navigate }) => {
           
         </button>
 
-        {/* Toggle mobile */}
+        {/* paarte mobile */}
         <button
           className="navbar-toggler"
           type="button"
