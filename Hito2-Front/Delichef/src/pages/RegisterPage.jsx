@@ -11,7 +11,7 @@ export default function RegisterPage({ navigate }) {
   const [direccion, setDireccion] = useState("");
 
   // Usando la variable de entorno de Vite
-  const API_URL = "http://localhost:4000";//import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
