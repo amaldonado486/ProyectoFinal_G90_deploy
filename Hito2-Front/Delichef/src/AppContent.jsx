@@ -11,6 +11,7 @@ import RegisterPage from "./pages/RegisterPage";
 import CheckoutConfirm from "./pages/CheckoutConfirmado";
 import NuevoKitPage from "./pages/NuevoKitPage";
 import AdminKitsPage from "./pages/AdminKitsPage";
+import EditarKitPage from "./pages/EditKitsPage";
 
 
 export default function AppContent() {
@@ -45,6 +46,8 @@ export default function AppContent() {
         return <NuevoKitPage navigate={navigate} />;   
       case "/admin/kits":
         return <AdminKitsPage navigate={navigate} />;
+      case "/admin/kits/edit":
+        return <EditarKitPage navigate={navigate} selectedId={selectedId} />;
 
         default:
         return <HomePage navigate={navigate} />;

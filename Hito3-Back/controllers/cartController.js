@@ -44,7 +44,7 @@ export async function updateCartItem(req, res) {
   const id = req.params.id;
   const { cantidad } = req.body;
 
-  console.log("📥 updateCartItem body:", req.body);
+  console.log("updateCartItem body:", req.body);
 
   if (!cantidad || isNaN(cantidad)) {
     return res.status(400).json({ error: "Cantidad inválida" });

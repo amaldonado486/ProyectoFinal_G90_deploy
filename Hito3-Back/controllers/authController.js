@@ -8,7 +8,7 @@ export async function register(req, res) {
 
     const hashed = await bcrypt.hash(contrasena, 10);
 
-      console.log("✅ register() controller HIT");
+      console.log("register() controller HIT");
 
     if (!username || !email || !contrasena) {
       return res.status(400).json({ error: "Campos requeridos faltantes" });

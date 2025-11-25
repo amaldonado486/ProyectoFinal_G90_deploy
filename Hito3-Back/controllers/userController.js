@@ -90,7 +90,7 @@ export const updateUser = async (req, res) => {
        SET fono = $1,
            direccion = $2,
            comuna = $3
-       WHERE id = $4
+       WHERE username = $4
        RETURNING id, username, email, fono, direccion, comuna`,
       [fono, direccion, comuna, userId]
     );

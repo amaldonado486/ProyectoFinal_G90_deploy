@@ -70,3 +70,27 @@ export async function updateKitStatus(req, res) {
     res.status(500).json({ error: "BD error" });
   }
 }
+
+export const updateKit = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, descripcion, categoria, precio, imagen_kit } = req.body;
+
+    const result = await pool.query(
+      `UPDATE productos
+       SET nombre=$1, descripcion=$2, categoria=$3, precio=$4, imagen_kit=$5
+       WHERE id=$6
+       RETURNING *`,
+      [nombre, descripcion, categoria, precio, imagen_kit, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Kit no encontrado" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (e) {
+    console.error("Error updating kit:", e);
+    res.status(500).json({ error: "Error actualizando kit" });
+  }
+};
