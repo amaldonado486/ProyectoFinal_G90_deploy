@@ -3,7 +3,6 @@ import { AuthContext } from "../context/AuthProvider";
 import { MapPin, CreditCard } from "lucide-react";
 import { formatPrice } from "../utils/formatPrice";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user, setUser } = useContext(AuthContext);
@@ -11,19 +10,12 @@ const ProfilePage = () => {
   const [orders, setOrders] = useState([]);
   const [adminOrders, setAdminOrders] = useState([]);
 
-  //const [address, setAddress] = useState({
-  //  direccion: "Av. Mockingbird 123",
-  //  ciudad: "Santiago",
-  //  fono: "912345678",
-  //});
-
   const [address, setAddress] = useState({
     direccion: "",
     comuna: "",
     fono: "",
   });
 
-  // Cuando el usuario cambia, rellenamos los campos
   useEffect(() => {
     if (!user) return;
 
@@ -34,11 +26,11 @@ const ProfilePage = () => {
     });
   }, [user]);
 
-const handleSave = async (e) => {
-  e.preventDefault();
+  const handleSave = async (e) => {
+    e.preventDefault();
 
-  try {
-    const API_URL = import.meta.env.VITE_API_URL;
+    try {
+      const API_URL = import.meta.env.VITE_API_URL;
 
       await axios.put(
         `${API_URL}/api/users/${user.username}`,
@@ -53,7 +45,6 @@ const handleSave = async (e) => {
         }
       );
 
-      // Actualizar datos en el contexto Auth
       setUser({
         ...user,
         fono: address.fono,
@@ -62,19 +53,15 @@ const handleSave = async (e) => {
       });
 
       alert("Datos actualizados correctamente");
-
-  } catch (error) {
-    console.error("Error actualizando usuario:", error);
-    alert("Hubo un error al actualizar los datos");
-  }
-};
-
-
-
+    } catch (error) {
+      console.error("Error actualizando usuario:", error);
+      alert("Hubo un error al actualizar los datos");
+    }
+  };
 
   useEffect(() => {
-    if (!user) return; 
-    
+    if (!user) return;
+
     const fetchOrders = async () => {
       try {
         const API_URL = import.meta.env.VITE_API_URL;
@@ -93,7 +80,6 @@ const handleSave = async (e) => {
     fetchOrders();
   }, [user]);
 
-  // Carga órdenes admin solo si es admin
   useEffect(() => {
     if (!user || user.rol !== "admin") return;
 
@@ -172,10 +158,6 @@ const handleSave = async (e) => {
             </button>
 
             <h4>Método de Pago (Mock)</h4>
-            <p className="text-muted small">
-              Solo aceptamos Tarjetas de Crédito/Débito.
-            </p>
-
             <button className="btn btn-primary w-100">
               <CreditCard size={18} className="me-2" />
               Agregar Método de Pago
@@ -183,48 +165,14 @@ const handleSave = async (e) => {
           </form>
         );
 
-//     case "orders":
-//       return (
-//         <div>
-//           <h4>Órdenes Pendientes</h4>
-//           <p className="text-muted small">
-//             Solo mostramos pedidos activos o recién entregados.
-//           </p>
-//
-//           <div className="alert alert-warning d-flex justify-content-between">
-//             <div>
-//               <strong>Orden #00123:</strong> {formatPrice(45000)}
-//               <p className="small">En camino – Entrega estimada: Mañana.</p>
-//             </div>
-//             <button className="btn btn-sm btn-outline-warning">
-//               Ver Detalle
-//             </button>
-//           </div>
-//
-//           <div className="alert alert-success d-flex justify-content-between">
-//             <div>
-//               <strong>Orden #00122:</strong> {formatPrice(32000)}
-//               <p className="small">Entregada – Hace 2 días.</p>
-//             </div>
-//             <button className="btn btn-sm btn-outline-success">
-//               Ver Detalle
-//             </button>
-//           </div>
-//
-//           <p className="text-muted small">
-//             El historial completo está archivado.
-//           </p>
-//         </div>
-//       );
+      case "orders":
+        return (
+          <div>
+            <h4>Mis Órdenes</h4>
 
-        case "orders":
-          return (
-            <div>
-              <h4>Mis Órdenes</h4>
-
-              {orders.length === 0 && (
-                <p className="text-muted">No tienes órdenes registradas.</p>
-              )}
+            {orders.length === 0 && (
+              <p className="text-muted">No tienes órdenes registradas.</p>
+            )}
 
             {orders.map((order) => (
               <div key={order.id} className="alert alert-secondary">
@@ -234,6 +182,24 @@ const handleSave = async (e) => {
                   Estado: {order.estado} <br />
                   Fecha: {new Date(order.fecha_creacion).toLocaleDateString()}
                 </p>
+
+                <ul className="small">
+                  {order.items.map((item) => (
+                    <li key={item.id}>
+                      {user?.rol === "admin" ? (
+                        <>
+                          Producto # ({item.id_producto}) : {item.nombre} —
+                          {item.cantidad}u — {formatPrice(item.precio)}
+                        </>
+                      ) : (
+                        <>
+                          {item.nombre} — {item.cantidad}u —
+                          {formatPrice(item.precio)}
+                        </>
+                      )}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -255,6 +221,14 @@ const handleSave = async (e) => {
                   Total: {formatPrice(order.monto_total)} <br />
                   Cliente: {order.username}
                 </p>
+
+                <ul className="small">
+                  {order.items.map((item) => (
+                    <li key={item.id}>
+                      {item.nombre} — {item.cantidad}u — {formatPrice(item.precio)}
+                    </li>
+                  ))}
+                </ul>
               </div>
             ))}
           </div>
@@ -296,14 +270,15 @@ const handleSave = async (e) => {
           {user?.rol === "admin" && (
             <li className="nav-item">
               <button
-                className={`nav-link ${activeTab === "admin" ? "active" : ""}`}
+                className={`nav-link ${
+                  activeTab === "admin" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("admin")}
               >
                 Órdenes de Todos
               </button>
             </li>
           )}
-
         </ul>
 
         <div className="mt-4">{renderContent()}</div>
