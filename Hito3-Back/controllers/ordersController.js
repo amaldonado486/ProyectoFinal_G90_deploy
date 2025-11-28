@@ -120,9 +120,10 @@ export async function getOrdersByUser(req, res) {
 
     const items = await pool.query(
       `
-      SELECT * 
-      FROM pedidos_items 
-      WHERE id_pedido = ANY($1)
+      SELECT pi.*, p.nombre 
+      FROM pedidos_items pi
+      JOIN productos p ON p.id = pi.id_producto
+      WHERE pi.id_pedido = ANY($1)
       `,
       [orderIds]
     );
@@ -163,3 +164,35 @@ export async function getOrdersByUserId(req, res) {
     client.release();
   }
 }
+
+export const getAllOrders = async (req, res) => {
+  try {
+  //console.log("Entró a getAllOrders");
+  //console.log("USER", req.user);
+
+    const result = await pool.query(
+      `SELECT o.id, o.monto_total, o.estado, o.fecha_creacion, 
+              u.username, u.rol
+       FROM pedidos o
+       JOIN usuarios u ON u.id = o.user_id
+       ORDER BY o.fecha_creacion DESC`
+    );
+
+
+    const items = await pool.query(
+      `SELECT oi.*, p.nombre
+       FROM pedidos_items oi
+       JOIN productos p ON p.id = oi.id_producto`
+    );
+
+    const ordersWithItems = result.rows.map(order => ({
+      ...order,
+      items: items.rows.filter(i => i.id_pedido === order.id)
+    }));
+
+    res.json(ordersWithItems);
+  } catch (error) {
+    console.error("Error cargando todas las órdenes:", error);
+    res.status(500).json({ error: "No se pudieron cargar las órdenes" });
+  }
+};

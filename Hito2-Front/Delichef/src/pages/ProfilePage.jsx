@@ -3,12 +3,14 @@ import { AuthContext } from "../context/AuthProvider";
 import { MapPin, CreditCard } from "lucide-react";
 import { formatPrice } from "../utils/formatPrice";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { user, setUser } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState("address");
   const [orders, setOrders] = useState([]);
+  const [adminOrders, setAdminOrders] = useState([]);
+
   //const [address, setAddress] = useState({
   //  direccion: "Av. Mockingbird 123",
   //  ciudad: "Santiago",
@@ -31,12 +33,6 @@ const ProfilePage = () => {
       fono: user.fono || "",
     });
   }, [user]);
-
-  if (!user)
-    return (
-      <p className="text-center py-5">Debes iniciar sesión para ver tu perfil.</p>
-    );
-
 
 const handleSave = async (e) => {
   e.preventDefault();
@@ -97,6 +93,34 @@ const handleSave = async (e) => {
     fetchOrders();
   }, [user]);
 
+  // Carga órdenes admin solo si es admin
+  useEffect(() => {
+    if (!user || user.rol !== "admin") return;
+
+    const fetchAdminOrders = async () => {
+      try {
+        const API_URL = import.meta.env.VITE_API_URL;
+
+        const response = await axios.get(
+          `${API_URL}/api/orders/admin/all`,
+          { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        );
+
+        setAdminOrders(response.data);
+      } catch (e) {
+        console.error("Error órdenes admin:", e);
+      }
+    };
+
+    fetchAdminOrders();
+  }, [user]);
+
+  if (!user)
+    return (
+      <p className="text-center py-5">
+        Debes iniciar sesión para ver tu perfil.
+      </p>
+    );
 
   const renderContent = () => {
     switch (activeTab) {
@@ -202,26 +226,39 @@ const handleSave = async (e) => {
                 <p className="text-muted">No tienes órdenes registradas.</p>
               )}
 
-              {orders.map((order) => (
-                <div key={order.id} className="alert alert-secondary">
-                  <strong>Pedido #{order.id}</strong>
-                  <p className="small">
-                    Total: {formatPrice(order.monto_total)} <br />
-                    Estado: {order.estado} <br />
-                    Fecha: {new Date(order.fecha_creacion).toLocaleDateString()}
-                  </p>
+            {orders.map((order) => (
+              <div key={order.id} className="alert alert-secondary">
+                <strong>Pedido #{order.id}</strong>
+                <p className="small">
+                  Total: {formatPrice(order.monto_total)} <br />
+                  Estado: {order.estado} <br />
+                  Fecha: {new Date(order.fecha_creacion).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        );
 
-                  <ul className="small">
-                    {order.items.map((item) => (
-                      <li key={item.id}>
-                        Producto #{item.id_producto} — {item.cantidad}u — {formatPrice(item.precio)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          );
+      case "admin":
+        return (
+          <div>
+            <h4>Órdenes de Todos</h4>
+
+            {adminOrders.length === 0 && (
+              <p className="text-muted">No hay órdenes registradas.</p>
+            )}
+
+            {adminOrders.map((order) => (
+              <div key={order.id} className="alert alert-info">
+                <strong>Pedido #{order.id}</strong>
+                <p className="small">
+                  Total: {formatPrice(order.monto_total)} <br />
+                  Cliente: {order.username}
+                </p>
+              </div>
+            ))}
+          </div>
+        );
 
       default:
         return null;
@@ -255,6 +292,18 @@ const handleSave = async (e) => {
               Mis Órdenes
             </button>
           </li>
+
+          {user?.rol === "admin" && (
+            <li className="nav-item">
+              <button
+                className={`nav-link ${activeTab === "admin" ? "active" : ""}`}
+                onClick={() => setActiveTab("admin")}
+              >
+                Órdenes de Todos
+              </button>
+            </li>
+          )}
+
         </ul>
 
         <div className="mt-4">{renderContent()}</div>

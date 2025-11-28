@@ -12,6 +12,7 @@ import CheckoutConfirm from "./pages/CheckoutConfirmado";
 import NuevoKitPage from "./pages/NuevoKitPage";
 import AdminKitsPage from "./pages/AdminKitsPage";
 import EditarKitPage from "./pages/EditKitsPage";
+import AdminOrdersPage from "./pages/AdminOrderPage";
 
 
 export default function AppContent() {
@@ -48,6 +49,9 @@ export default function AppContent() {
         return <AdminKitsPage navigate={navigate} />;
       case "/admin/kits/edit":
         return <EditarKitPage navigate={navigate} selectedId={selectedId} />;
+      case "/admin/orders":
+        return <AdminOrdersPage navigate={navigate} />;
+  
 
         default:
         return <HomePage navigate={navigate} />;

@@ -3,11 +3,13 @@ import jwt from "jsonwebtoken";
 
 export function requireAuth(req, res, next) {
     try {
-        const header = req.headers.authorization;
+        console.log("requireAuth ejecutado");
+        console.log("token:", req.headers.authorization);
 
-        if (!header?.startsWith("Bearer ")) {
-            return res.status(401).json({ error: "Sin token" });
-        }
+    const header = req.headers.authorization;
+    if (!header) {
+      return res.status(401).json({ error: "Sin token" });
+    }
 
         // Extraer el token
         const token = header.replace("Bearer ", "");
@@ -21,4 +23,14 @@ export function requireAuth(req, res, next) {
         console.error("Error requireAuth:", e.message);
         return res.status(401).json({ error: "Token inválido" });
     }
+}
+
+export function adminMiddleware(req, res, next) {
+  console.log("adminMiddleware ejecutado");
+  console.log("user recibido:", req.user);
+
+  if (req.user?.rol !== "admin") {
+    return res.status(403).json({ error: "Acceso denegado" });
+  }
+  next();
 }

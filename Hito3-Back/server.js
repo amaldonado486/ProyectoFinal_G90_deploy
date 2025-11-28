@@ -28,7 +28,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/carts", cartsRoutes);
 app.use("/api/kits", kitsRoutes);
 app.use("/api/orders", ordersRoutes);
-
+//console.log("ordersRoutes cargado");
 app.get("/", (req, res) => {
   res.send("API Online");
 });

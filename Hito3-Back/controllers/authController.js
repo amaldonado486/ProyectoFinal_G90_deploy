@@ -48,7 +48,7 @@ export async function login(req, res) {
     if (!match) return res.status(401).json({ error: "Credenciales inválidas" });
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, rol:user.rol },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );

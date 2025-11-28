@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
-console.log("✅ authRoutes loaded");
+console.log(" authRoutes loaded");
 
 export function requireAuth(req, res, next) {
   const header = req.headers.authorization;
